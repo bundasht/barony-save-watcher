@@ -16,7 +16,7 @@ function createWindow(): void {
     title: 'Barony Save History',
     backgroundColor: '#12100d',
     webPreferences: {
-      preload: join(__dirname, '../preload/index.mjs'),
+      preload: join(__dirname, '../preload/index.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true

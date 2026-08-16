@@ -4,3 +4,6 @@ release/
 coverage/
 .DS_Store
 *.log
+*.baronysave
+.barony/
+Barony Save History/
