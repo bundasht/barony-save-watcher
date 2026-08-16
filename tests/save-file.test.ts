@@ -30,5 +30,7 @@ describe('save parsing', () => {
 
   it('sanitizes names for future Windows distributions', () => {
     expect(sanitizeSegment(' A/B:C*  ')).toBe('A-B-C-')
+    expect(sanitizeSegment('CON')).toBe('_CON')
+    expect(sanitizeSegment('lpt1.txt')).toBe('_lpt1.txt')
   })
 })

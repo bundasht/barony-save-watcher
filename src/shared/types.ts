@@ -58,7 +58,7 @@ export interface HistoryIndex {
 }
 
 export interface WatcherState {
-  sourceDirectory: string
+  sourceDirectory: string | null
   historyDirectory: string
   running: boolean
   lastScanAt: string | null
@@ -79,6 +79,7 @@ export interface BaronyHistoryApi {
   getVersion(versionId: string): Promise<VersionRecord | null>
   restore(versionId: string): Promise<RestoreResult>
   rescan(): Promise<void>
+  chooseSourceDirectory(): Promise<string | null>
   revealHistory(): Promise<void>
   onHistoryChanged(callback: () => void): () => void
 }

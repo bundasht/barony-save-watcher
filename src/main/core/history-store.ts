@@ -1,6 +1,7 @@
 import { mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import type { GameMode, GameRecord, HistoryIndex, VersionRecord, VersionStatus } from '../../shared/types'
+import { atomicReplace } from './platform'
 import { parseSave } from './save-file'
 
 const EMPTY_INDEX: HistoryIndex = { schemaVersion: 1, games: [], versions: [] }
@@ -101,6 +102,6 @@ export class HistoryStore {
     await mkdir(dirname(this.indexPath), { recursive: true })
     const temporary = `${this.indexPath}.tmp`
     await writeFile(temporary, `${JSON.stringify(this.index, null, 2)}\n`, 'utf8')
-    await rename(temporary, this.indexPath)
+    await atomicReplace(temporary, this.indexPath)
   }
 }

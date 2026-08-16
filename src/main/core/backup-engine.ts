@@ -19,7 +19,6 @@ import {
 interface Fingerprint { size: number; mtimeMs: number }
 
 export class BackupEngine extends EventEmitter {
-  readonly store: HistoryStore
   private timer: NodeJS.Timeout | null = null
   private fingerprints = new Map<string, Fingerprint>()
   private scanPromise: Promise<void> | null = null
@@ -29,10 +28,10 @@ export class BackupEngine extends EventEmitter {
   constructor(
     readonly sourceDirectory: string,
     readonly historyDirectory: string,
-    private readonly pollIntervalMs = 1000
+    private readonly pollIntervalMs = 1000,
+    readonly store = new HistoryStore(historyDirectory)
   ) {
     super()
-    this.store = new HistoryStore(historyDirectory)
     this.state = {
       sourceDirectory,
       historyDirectory,
@@ -45,7 +44,6 @@ export class BackupEngine extends EventEmitter {
 
   async initialize(): Promise<void> {
     await this.store.initialize()
-    await mkdir(this.sourceDirectory, { recursive: true })
   }
 
   start(): void {
@@ -59,6 +57,11 @@ export class BackupEngine extends EventEmitter {
     if (this.timer) clearInterval(this.timer)
     this.timer = null
     this.state.running = false
+  }
+
+  async stopAndWait(): Promise<void> {
+    this.stop()
+    if (this.scanPromise) await this.scanPromise
   }
 
   getState(): WatcherState {

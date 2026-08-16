@@ -17,6 +17,7 @@ button { font: inherit; }
 .status-dot { width: 9px; height: 9px; flex: 0 0 9px; margin-top: 4px; border-radius: 50%; background: #725745; box-shadow: 0 0 0 4px #261f19; }
 .status-dot.active { background: #80a86b; box-shadow: 0 0 0 4px #293326, 0 0 12px #80a86b88; }
 .sidebar-spacer { flex: 1; }
+.sidebar-actions { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; }
 .text-button { position: relative; z-index: 1; padding: 0; color: #c8a66e; border: 0; background: none; text-align: left; cursor: pointer; font-size: 12px; }
 .source-path { position: relative; z-index: 1; overflow: hidden; margin: 10px 0 0; color: #70685c; font: 10px/1.4 ui-monospace, monospace; text-overflow: ellipsis; }
 main { padding: 44px 54px 58px; overflow: auto; }
@@ -38,6 +39,9 @@ h2 { font-size: 30px; }
 .info-panel { grid-column: 1 / -1; display: flex; gap: 13px; align-items: center; padding: 16px 18px; border-left: 2px solid #8a6a39; color: #9e9382; background: #1c1813; font-size: 12px; line-height: 1.55; }
 .info-panel > span { width: 24px; height: 24px; display: grid; place-items: center; flex: 0 0 24px; border: 1px solid #8a6a39; border-radius: 50%; color: #c79b59; }
 .info-panel p { margin: 0; }
+.setup-warning { grid-column: 1 / -1; padding: 18px; display: grid; grid-template-columns: 1fr auto; gap: 5px 18px; align-items: center; border: 1px solid #765535; color: #d8c4a4; background: #2a2117; }
+.setup-warning p { margin: 0; color: #a99a83; font-size: 12px; }
+.setup-warning .secondary-button { grid-column: 2; grid-row: 1 / span 2; }
 .content-list { max-width: 820px; display: flex; flex-direction: column; gap: 10px; }
 .list-card { width: 100%; min-height: 82px; padding: 14px 20px; display: grid; grid-template-columns: 52px minmax(180px, 1fr) auto 16px; gap: 18px; align-items: center; border: 1px solid #463a29; border-radius: 6px; color: inherit; background: linear-gradient(90deg, #241f18, #1b1813); text-align: left; cursor: pointer; transition: border-color .15s, background .15s; }
 .list-card:hover { border-color: #9c7945; background: linear-gradient(90deg, #2d261b, #211c15); }

@@ -8,6 +8,7 @@ const api: BaronyHistoryApi = {
   getVersion: (versionId: string) => ipcRenderer.invoke('history:get-version', versionId),
   restore: (versionId: string) => ipcRenderer.invoke('history:restore', versionId),
   rescan: () => ipcRenderer.invoke('history:rescan'),
+  chooseSourceDirectory: () => ipcRenderer.invoke('history:choose-source'),
   revealHistory: () => ipcRenderer.invoke('history:reveal'),
   onHistoryChanged: (callback: () => void) => {
     const listener = (): void => callback()

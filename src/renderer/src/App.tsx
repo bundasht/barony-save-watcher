@@ -76,6 +76,17 @@ export function App(): ReactElement {
     setScreen({ name: 'detail', mode, game, versionId })
   }
 
+  const chooseSourceDirectory = async (): Promise<void> => {
+    try {
+      const selected = await window.baronyHistory.chooseSourceDirectory()
+      if (!selected) return
+      setNotice(`Now watching ${selected}`)
+      await refresh()
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : String(error))
+    }
+  }
+
   const restore = async (): Promise<void> => {
     if (!detail) return
     setRestoring(true)
@@ -98,11 +109,14 @@ export function App(): ReactElement {
       <div className="brand-copy"><strong>Barony</strong><span>Save History</span></div>
       <div className="watch-status">
         <span className={state?.running ? 'status-dot active' : 'status-dot'} />
-        <div><strong>{state?.running ? 'Watching' : 'Stopped'}</strong><span>{state?.lastBackupAt ? `Last backup ${formatDate(state.lastBackupAt)}` : 'Waiting for a save'}</span></div>
+        <div><strong>{state?.running ? 'Watching' : state?.sourceDirectory ? 'Stopped' : 'Setup needed'}</strong><span>{state?.lastBackupAt ? `Last backup ${formatDate(state.lastBackupAt)}` : state?.sourceDirectory ? 'Waiting for a save' : 'Choose the Barony save folder'}</span></div>
       </div>
       <div className="sidebar-spacer" />
-      <button className="text-button" onClick={() => void window.baronyHistory.revealHistory()}>Open history folder ↗</button>
-      <p className="source-path" title={state?.sourceDirectory}>{state?.sourceDirectory}</p>
+      <div className="sidebar-actions">
+        <button className="text-button" onClick={() => void chooseSourceDirectory()}>{state?.sourceDirectory ? 'Change save folder' : 'Choose save folder'}…</button>
+        <button className="text-button" onClick={() => void window.baronyHistory.revealHistory()}>Open history folder ↗</button>
+      </div>
+      <p className="source-path" title={state?.sourceDirectory ?? undefined}>{state?.sourceDirectory ?? 'No save folder selected'}</p>
     </aside>
 
     <main>
@@ -123,6 +137,7 @@ export function App(): ReactElement {
           <span className="mode-icon">♞</span><span><strong>Multiplayer</strong><small>Browse shared campaigns</small></span><b>→</b>
         </button>
         <div className="info-panel"><span>i</span><p>The app archives a new version whenever Barony updates an active save. It never removes versions from the history.</p></div>
+        {state && !state.sourceDirectory && <div className="setup-warning"><strong>Save folder needed</strong><p>Choose Barony’s savegames folder before playing so new saves can be archived.</p><button className="secondary-button" onClick={() => void chooseSourceDirectory()}>Choose folder</button></div>}
       </section>}
 
       {screen.name === 'games' && <section className="content-list">

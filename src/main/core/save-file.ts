@@ -108,7 +108,10 @@ export function sanitizeSegment(value: string): string {
     .replace(/[. ]+$/g, '')
     .replace(/\s+/g, ' ')
     .trim()
-  return sanitized.slice(0, 72) || 'Unnamed'
+  const shortened = sanitized.slice(0, 72) || 'Unnamed'
+  return /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?$/i.test(shortened)
+    ? `_${shortened}`
+    : shortened
 }
 
 export function fileTimestamp(date: Date): string {

@@ -1,8 +1,9 @@
-import { mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { afterEach, describe, expect, it } from 'vitest'
 import { BackupEngine } from '../src/main/core/backup-engine'
+import { HistoryStore } from '../src/main/core/history-store'
 
 const roots: string[] = []
 const save = (level: number, name = 'Bohdan'): string => JSON.stringify({
@@ -17,6 +18,7 @@ async function setup(): Promise<{ engine: BackupEngine; source: string; history:
   roots.push(root)
   const source = join(root, 'source')
   const history = join(root, 'history')
+  await mkdir(source)
   const engine = new BackupEngine(source, history, 60_000)
   await engine.initialize()
   return { engine, source, history }
@@ -27,6 +29,26 @@ afterEach(async () => {
 })
 
 describe('backup engine', () => {
+  it('uses an injected history store when the app changes source folders', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'barony-history-'))
+    roots.push(root)
+    const history = join(root, 'history')
+    const store = new HistoryStore(history)
+    const engine = new BackupEngine(join(root, 'source'), history, 60_000, store)
+
+    expect(engine.store).toBe(store)
+  })
+
+  it('does not create a missing active save directory while initializing', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'barony-history-'))
+    roots.push(root)
+    const source = join(root, 'missing-source')
+    const engine = new BackupEngine(source, join(root, 'history'), 60_000)
+
+    await engine.initialize()
+    await expect(stat(source)).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
   it('retries a partially written source save on a later scan', async () => {
     const { engine, source } = await setup()
     const active = join(source, 'savegame0.baronysave')

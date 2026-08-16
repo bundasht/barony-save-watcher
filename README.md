@@ -1,10 +1,11 @@
 # Barony Save History
 
-A macOS-first desktop companion that automatically archives Barony's active save after every level and lets you safely restore any archived version. The core and UI are structured for a later Windows build from the same codebase.
+A macOS and Windows desktop companion that automatically archives Barony's active save after every level and lets you safely restore any archived version.
 
 ## V0 behavior
 
-- Watches `~/.barony/savegames` while the application is running.
+- Watches `~/.barony/savegames` on macOS while the application is running.
+- On Windows, discovers Barony in Steam libraries or lets you choose the installation/save folder.
 - Archives each distinct completed `savegameN.baronysave` and `savegameN_mp.baronysave`.
 - Groups history into singleplayer and multiplayer games, then readable per-level versions.
 - Keeps index records visible when backup files are deleted manually.
@@ -41,13 +42,17 @@ npm run dist:mac
 
 The builder produces Apple Silicon and Intel artifacts in `release/`. Unsigned development builds trigger the normal Gatekeeper warning. A public release should add an Apple Developer ID and notarization credentials.
 
-## Windows adaptation
+## Windows distribution
 
-The renderer, history index, parser, backup engine, and restore workflow are platform-neutral. Windows work is isolated to save-directory discovery and destination replacement in `src/main/core/platform.ts`. Once implemented and tested on Windows:
+Build the x64 NSIS installer and portable executable on Windows:
 
 ```bash
 npm run dist:win
 ```
+
+Artifacts are written to `release/`. Windows builds are unsigned during development, so Microsoft SmartScreen may warn before launch. The first launch searches Steam's configured libraries for `Barony/savegames`; use **Choose save folder** if Barony came from another storefront or is installed in a custom portable location.
+
+Windows-specific save discovery and replacement retry behavior remain isolated in `src/main/core/platform.ts`. Restoration still archives the active save first and does not require Barony to be closed.
 
 ## History format
 
