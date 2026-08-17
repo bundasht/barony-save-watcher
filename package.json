@@ -1,10 +1,17 @@
 {
   "name": "barony-save-history",
   "version": "0.1.0",
+  "private": true,
   "description": "Automatic per-level save history and safe restoration for Barony",
   "main": "out/main/index.js",
-  "author": "Bohdan Turani",
+  "author": "Bohdan Turanyi",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bundasht/barony-save-watcher.git"
+  },
+  "homepage": "https://github.com/bundasht/barony-save-watcher#readme",
+  "bugs": "https://github.com/bundasht/barony-save-watcher/issues",
   "type": "module",
   "scripts": {
     "predev": "install-electron --no",
@@ -13,8 +20,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "dist:mac": "npm run build && electron-builder --mac",
-    "dist:win": "npm run build && electron-builder --win --x64"
+    "dist:mac": "npm run build && electron-builder --mac --publish never",
+    "dist:win": "npm run build && electron-builder --win --x64 --publish never"
   },
   "dependencies": {},
   "devDependencies": {

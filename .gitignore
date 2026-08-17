@@ -7,3 +7,15 @@ coverage/
 *.baronysave
 .barony/
 Barony Save History/
+
+# Local configuration and signing credentials
+.env*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+*.crt
+*.mobileprovision
+*.provisionprofile

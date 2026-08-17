@@ -1,6 +1,10 @@
 # Barony Save History
 
+[![CI](https://github.com/bundasht/barony-save-watcher/actions/workflows/ci.yml/badge.svg)](https://github.com/bundasht/barony-save-watcher/actions/workflows/ci.yml)
+
 A macOS and Windows desktop companion that automatically archives Barony's active save after every level and lets you safely restore any archived version.
+
+This is an unofficial community project. It is not affiliated with or endorsed by the developers or publishers of Barony. Game names and trademarks belong to their respective owners.
 
 ## V0 behavior
 
@@ -57,3 +61,11 @@ Windows-specific save discovery and replacement retry behavior remain isolated i
 ## History format
 
 Backups are stored under `~/Barony Save History/` with readable paths. `index.json` is an append-only catalogue from the user's perspective: removing a `.baronysave` manually marks its version as missing but does not remove the version or game from the UI.
+
+## Security
+
+Please report vulnerabilities privately as described in [SECURITY.md](SECURITY.md). Do not include save files or other personal data in public issues.
+
+## License
+
+The source code is available under the [MIT License](LICENSE).
